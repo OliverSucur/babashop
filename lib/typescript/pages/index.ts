@@ -7,8 +7,17 @@ export async function loadProducts() {
     const products: Product[] = await responseProducts.json();
     const main = document.querySelector("main");
 
-    
+    const button = document.createElement("button");
+    button.id = "btn-cart";
+    button.innerHTML = "Warenkorb";
 
+    const header = document.querySelector("header");
+    header.appendChild(button);
+    
+    document.querySelector("#btn-cart").addEventListener("click", () => {
+        location.href = "./lib/html/cart.html";
+    })
+    
     for(const product of products){
         const div = document.createElement("div");
         div.setAttribute("data-id", product.id);
@@ -40,6 +49,3 @@ async function productToCart(product: Product){
     console.log("nigger");
 }
 
-document.getElementById("btn-cart").addEventListener("click", () => {
-    location.href = "./lib/html/cart.html";
-})
