@@ -1,30 +1,31 @@
 import { Application, Router, send } from "https://deno.land/x/oak@v6.3.1/mod.ts"
-import { v4 } from "https://deno.land/std@0.80.0/uuid/mod.ts";
 import { Session } from "https://deno.land/x/session/mod.ts";
 
-import { Client } from "./models/client.ts";
+import { Product } from "./models/product.ts";
 
 const app = new Application();
 
-const clients: Client[] = [
-    { "id": "1", "firstName": "Oliver", "lastName": "Sucur"}
-];
+const products: Product[] = [];
 
-const session = new Session({
+export const session = new Session({
     framework: "oak",
     store: "memory",
 });
 
 await session.init();
 
-app.use(session.use()(session));
 
 const router = new Router();
 
 router
-    .get("/babashop/clients", (ctx) => {
-        ctx.response.body = clients;
+    .get("/babashop/products", (ctx) => {
+        ctx.response.body = products;
     })
-    .get("/babashop/clients:id", (ctx) => {
-        ctx.response.body = clients.find(e => e.id == ctx.params.id);
+    .get("/babashop/products:id", (ctx) => {
+        ctx.response.body = products.find(e => e.id == ctx.params.id);
     });
+
+app.use(session.use()(session));
+app.use(router.routes());
+
+export const api = router.routes();
