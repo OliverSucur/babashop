@@ -16,7 +16,7 @@ Shell (macOS and Linux):<br />
 curl -fsSL https://deno.land/x/install/install.sh | sh
 ```
 <br />
-Powershell (Windows):
+Powershell (Windows):<br />
 ```
 iwr https://deno.land/x/install/install.ps1 -useb | iex
 ```
