@@ -31,7 +31,7 @@ export async function loadTable(){
         const tdTotal = tr.appendChild(document.createElement("td"));
         tdProduct.innerHTML = product.productName;
         tdEinzelpreis.innerHTML = product.specialOffer.toString();
-        tdAnzahl.innerHTML = "1";
+        tdAnzahl.innerHTML = "<button>-</button>1<button>+</button>"
         tdTotal.innerHTML = "2";
         table.appendChild(tr);
     }
