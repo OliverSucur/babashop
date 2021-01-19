@@ -71,6 +71,18 @@ export async function loadTable(){
             loadTable();
         });
     }
+
+    const tr = document.createElement("tr");
+    const tdProduct = tr.appendChild(document.createElement("td"));
+    const tdEinzelpreis = tr.appendChild(document.createElement("td"));
+    const tdAnzahl = tr.appendChild(document.createElement("td"));
+    const tdTotal = tr.appendChild(document.createElement("td"));
+    const responseTotal = await fetch("/babashop/cart/products/total");
+    const total = responseTotal.json();
+    if(await total != 0){
+        tdTotal.innerHTML = await total;
+    }
+    table.appendChild(tr);
 }
 
 async function getAnzahl(product: Product): Promise<number>{
@@ -80,9 +92,4 @@ async function getAnzahl(product: Product): Promise<number>{
     const anzahl = cartProducts.filter(e => e.id == product.id).length;
     console.log(anzahl);
     return anzahl;
-}
-
-async function deleteProduct(product: Product){
-    await fetch(`/babashop/cart/products/remove:${product.id}`, { method: "DELETE" });
-    await loadTable();
 }

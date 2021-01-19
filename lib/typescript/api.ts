@@ -133,6 +133,13 @@ router
         cart.splice(cart.length-1, 1);
         console.log(cart);
         ctx.response.status = 200;
+    })
+    .get("/babashop/cart/products/total", (ctx) => {
+        let total = 0;
+        for(const product of cart){
+            total += product.specialOffer;
+        }
+        ctx.response.body = total;
     });
     
 
