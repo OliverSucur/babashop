@@ -4,6 +4,7 @@ import { v4 } from "https://deno.land/std@0.80.0/uuid/mod.ts";
 
 import { Product } from "./../models/product.ts";
 import { TableColumn } from "./../models/tablecolumn.ts";
+import { AnzahlCartProducts } from "./../models/anzahl.ts";
 
 const app = new Application();
 
@@ -120,13 +121,17 @@ router
     .get("/babashop/products:id", (ctx) => {
         ctx.response.body = products.find(e => e.id == ctx.params.id);
     })
-    .post("/babashop/cart", async (ctx) => {
+    .post("/babashop/cart",  async (ctx) => {
         let addedProduct = await ctx.request.body({ type: "json" }).value;
         cart.push(addedProduct);
         ctx.response.body = 200;
     })
-    .get("/babashop/cart/products", async (ctx) => {
+    .get("/babashop/cart/products", (ctx) => {
         ctx.response.body = cart;
+    })
+    .delete("/babashop/cart/products/remove:id", (ctx) => {
+        cart.splice(cart.findIndex(e => e.id === ctx.params.id),1);
+        ctx.response.status = 200;
     });
     
 

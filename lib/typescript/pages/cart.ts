@@ -1,5 +1,6 @@
 import { TableColumn } from "../../models/tablecolumn.ts";
 import { Product } from "../../models/product.ts";
+import { AnzahlCartProducts } from "../../models/anzahl.ts";
 
 export async function loadTable(){
     const table = document.querySelector("table");
@@ -29,10 +30,25 @@ export async function loadTable(){
         const tdEinzelpreis = tr.appendChild(document.createElement("td"));
         const tdAnzahl = tr.appendChild(document.createElement("td"));
         const tdTotal = tr.appendChild(document.createElement("td"));
+        let anzahl:number;
+        anzahl = await getAnzahl(product);
         tdProduct.innerHTML = product.productName;
         tdEinzelpreis.innerHTML = product.specialOffer.toString();
-        tdAnzahl.innerHTML = "<button>-</button>1<button>+</button>"
-        tdTotal.innerHTML = "2";
+        tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl">-</button>${anzahl}<button id="btn-addAnzahl">+</button>`
+        tdTotal.innerHTML = `${product.specialOffer*anzahl}`;
         table.appendChild(tr);
+
+        document.getElementById("btn-deleteAnzahl").addEventListener("click", () => {
+            
+        })
     }
+}
+
+async function getAnzahl(product: Product): Promise<number>{
+    const responseCartProducts = await fetch("/babashop/cart/products");
+    const cartProducts: Product[] = await responseCartProducts.json();
+
+    const anzahl = cartProducts.filter(e => e.id == product.id).length;
+    console.log(anzahl);
+    return anzahl;
 }
