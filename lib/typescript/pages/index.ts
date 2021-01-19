@@ -17,7 +17,7 @@ export async function loadProducts() {
     document.querySelector("#btn-cart").addEventListener("click", () => {
         location.href = "./lib/html/cart.html";
     })
-    
+
     for(const product of products){
         const div = document.createElement("div");
         div.setAttribute("data-id", product.id);
@@ -46,6 +46,5 @@ async function productToCart(product: Product){
             headers: { 'Content-Type': 'application/json' }
         }
     )
-    console.log("nigger");
 }
 
