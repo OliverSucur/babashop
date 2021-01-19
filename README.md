@@ -16,16 +16,20 @@ Shell (macOS and Linux):<br />
 curl -fsSL https://deno.land/x/install/install.sh | sh
 ```
 <br />
-Powershell (Windows):<br />
+Powershell (Windows):
 ```
 iwr https://deno.land/x/install/install.ps1 -useb | iex
 ```
 
 ## Usage
+First:<br />
 ```
-deno run --allow-net --allow-read webserver.js
+deno run --allow-write --allow-read --unstable .lib\typescript\jsbuilder.ts
 ```
-
+Second:
+```
+deno run --allow-net --allow-read webserver.ts
+```
 Make sure that you're in the right directory when you run it.
 
 ## Contributing
