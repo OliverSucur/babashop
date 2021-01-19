@@ -23,8 +23,20 @@ export async function loadTable(){
 
     const responseCartProducts = await fetch("/babashop/cart/products");
     const cartProducts: Product[] = await responseCartProducts.json();
+    
+    const filteredProducts: Product[] = [];
+    for(let i = 0; i < cartProducts.length; i++){
+        let currProduct = cartProducts[i];
+        console.log(currProduct);
+        if(filteredProducts.find(e => e.id == currProduct.id)){
+            continue;
+        }else{
+            filteredProducts.push(currProduct);
+        }
+    }
 
-    for(const product of cartProducts){
+    console.log(filteredProducts); 
+    for(const product of filteredProducts){
         const tr = document.createElement("tr");
         const tdProduct = tr.appendChild(document.createElement("td"));
         const tdEinzelpreis = tr.appendChild(document.createElement("td"));
@@ -34,14 +46,28 @@ export async function loadTable(){
         anzahl = await getAnzahl(product);
         tdProduct.innerHTML = product.productName;
         tdEinzelpreis.innerHTML = product.specialOffer.toString();
-        tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl-${product.productName}">-</button>${anzahl}<button id="btn-addAnzahl${product.productName}">+</button>`
+        tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl-${product.productName}">-</button>${anzahl}<button id="btn-addAnzahl-${product.productName}">+</button>`
         tdTotal.innerHTML = `${product.specialOffer*anzahl}`;
         table.appendChild(tr);
     }
 
-    for(const product of cartProducts){
+    for(const product of filteredProducts){
         document.getElementById(`btn-deleteAnzahl-${product.productName}`).addEventListener("click", async () => {
             await fetch(`/babashop/cart/products/remove:${product.id}`, { method: "DELETE" });
+            loadTable();
+        });
+    }
+
+    for(const product of filteredProducts){
+        document.getElementById(`btn-addAnzahl-${product.productName}`).addEventListener("click", async () => {
+            await fetch(
+                "/babashop/cart",
+                {
+                    method: "POST",
+                    body: JSON.stringify(product),
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            )
             loadTable();
         });
     }
