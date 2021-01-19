@@ -6,13 +6,18 @@ export async function loadProducts() {
     const responseProducts = await fetch("/babashop/products");
     const products: Product[] = await responseProducts.json();
     const main = document.querySelector("main");
+    main.innerHTML = "";
+    document.getElementById("div-button").innerHTML = "";
+
+    const responseTotal = await fetch("/babashop/cart/products/total");
+    const total:Promise<number> = responseTotal.json();
 
     const button = document.createElement("button");
     button.id = "btn-cart";
-    button.innerHTML = "Warenkorb";
+    button.innerHTML = `<img src='./assets/svg/shopping-cart.svg'> CHF ${(await total).toFixed(2)}`;
 
     const header = document.querySelector("header");
-    header.appendChild(button);
+    document.getElementById("div-button").appendChild(button);
     
     document.querySelector("#btn-cart").addEventListener("click", () => {
         location.href = "./lib/html/cart.html";
@@ -46,5 +51,6 @@ async function productToCart(product: Product){
             headers: { 'Content-Type': 'application/json' }
         }
     )
+    loadProducts();
 }
 

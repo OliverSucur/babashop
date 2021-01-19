@@ -1,8 +1,9 @@
 import { TableColumn } from "../../models/tablecolumn.ts";
 import { Product } from "../../models/product.ts";
-import { AnzahlCartProducts } from "../../models/anzahl.ts";
 
 export async function loadTable(){
+    document.querySelector("#cart-back-button").innerHTML = "";
+
     const table = document.querySelector("table");
     table.innerHTML = "";
     const responseTableColumns = await fetch("/babashop/cart/tablecolumns");
@@ -20,6 +21,22 @@ export async function loadTable(){
     tdTotalTitle.innerHTML = tablecolumns[3].title;
 
     table.appendChild(trTitle);
+
+    const buttonBack = document.createElement("button");
+    buttonBack.innerHTML = "Zurück";
+    buttonBack.id = "btn-back";
+    document.querySelector("#cart-back-button").appendChild(buttonBack);
+    document.querySelector("#btn-back").addEventListener("click", () => {
+        location.href = "./../../index.html";
+    });
+
+    const buttonOrder = document.createElement("button");
+    buttonOrder.innerHTML = "Bestellen";
+    buttonOrder.id = "btn-order";
+    document.querySelector("#cart-back-button").appendChild(buttonOrder);
+    document.querySelector("#btn-order").addEventListener("click", () => {
+        location.href = "./order.html";
+    });
 
     const responseCartProducts = await fetch("/babashop/cart/products");
     const cartProducts: Product[] = await responseCartProducts.json();
@@ -45,15 +62,15 @@ export async function loadTable(){
         let anzahl:number;
         anzahl = await getAnzahl(product);
         tdProduct.innerHTML = product.productName;
-        tdEinzelpreis.innerHTML = product.specialOffer.toString();
+        tdEinzelpreis.innerHTML = `CHF ${product.specialOffer.toFixed(2)}`;
         tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl-${product.productName}">-</button>${anzahl}<button id="btn-addAnzahl-${product.productName}">+</button>`
-        tdTotal.innerHTML = `${product.specialOffer*anzahl}`;
+        tdTotal.innerHTML = `CHF ${(product.specialOffer*anzahl).toFixed(2)}`;
         table.appendChild(tr);
     }
 
     for(const product of filteredProducts){
         document.getElementById(`btn-deleteAnzahl-${product.productName}`).addEventListener("click", async () => {
-            await fetch(`/babashop/cart/products/remove:${product.id}`, { method: "DELETE" });
+            await fetch(`/babashop/cart/products/remove${product.id}`, { method: "DELETE" });
             loadTable();
         });
     }
@@ -78,9 +95,9 @@ export async function loadTable(){
     const tdAnzahl = tr.appendChild(document.createElement("td"));
     const tdTotal = tr.appendChild(document.createElement("td"));
     const responseTotal = await fetch("/babashop/cart/products/total");
-    const total = responseTotal.json();
+    const total:Promise<number> = responseTotal.json();
     if(await total != 0){
-        tdTotal.innerHTML = await total;
+        tdTotal.innerHTML =  `CHF ${(await total).toFixed(2)}`;
     }
     table.appendChild(tr);
 }

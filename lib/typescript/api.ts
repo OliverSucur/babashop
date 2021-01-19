@@ -4,7 +4,6 @@ import { v4 } from "https://deno.land/std@0.80.0/uuid/mod.ts";
 
 import { Product } from "./../models/product.ts";
 import { TableColumn } from "./../models/tablecolumn.ts";
-import { AnzahlCartProducts } from "./../models/anzahl.ts";
 
 const app = new Application();
 
@@ -91,14 +90,14 @@ const products: Product[] = [
     }
 ];
 
-const cart: Product[] = [];
+let cart: Product[] = [];
 const tablecolumns: TableColumn[] = [
     {id: v4.generate(), title: "Produkt"},
     {id: v4.generate(), title: "Einzelpreis"},
     {id: v4.generate(), title: "Anzahl"},
     {id: v4.generate(), title: "Total"},
 ];
-
+let detailProduct:Product;
 const session = new Session({
     framework: "oak",
     store: "memory",
@@ -130,16 +129,19 @@ router
         ctx.response.body = cart;
     })
     .delete("/babashop/cart/products/remove:id", (ctx) => {
-        cart.splice(cart.length-1, 1);
-        console.log(cart);
+        cart = cart.filter(e => e.id != ctx.params.id);
         ctx.response.status = 200;
     })
     .get("/babashop/cart/products/total", (ctx) => {
-        let total = 0;
+        let total:number = 0;
         for(const product of cart){
             total += product.specialOffer;
         }
         ctx.response.body = total;
+    })
+    .delete("/babashop/cart/products/remove/all", (ctx) => {
+        cart = [];
+        ctx.response.status = 200;
     });
     
 
