@@ -3,6 +3,7 @@ import { Session } from "https://deno.land/x/session/mod.ts";
 import { v4 } from "https://deno.land/std@0.80.0/uuid/mod.ts";
 
 import { Product } from "./../models/product.ts";
+import { TableColumn } from "./../models/tablecolumn.ts";
 
 const app = new Application();
 
@@ -90,7 +91,7 @@ const products: Product[] = [
 ];
 
 const cart: Product[] = [];
-const tablecolumns = [
+const tablecolumns: TableColumn[] = [
     {id: v4.generate(), title: "Produkt"},
     {id: v4.generate(), title: "Einzelpreis"},
     {id: v4.generate(), title: "Anzahl"},
@@ -124,7 +125,7 @@ router
         cart.push(addedProduct);
         ctx.response.body = 200;
     })
-    .get("/babashop/cart", async (ctx) => {
+    .get("/babashop/cart/products", async (ctx) => {
         ctx.response.body = cart;
     });
     
