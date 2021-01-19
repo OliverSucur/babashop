@@ -66,3 +66,8 @@ main{
     background-color: lightgray;
     transition: 0.3s;
 }
+
+.normalPrice{
+    color: red;
+    text-decoration: line-through;
+}

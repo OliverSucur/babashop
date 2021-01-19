@@ -31,7 +31,7 @@ export async function loadProducts() {
             <img src="./../assets/img/${product.imageName}" alt="Avatar" style="width:100%">
             <div class="container">
                 <h4>${product.productName}</h4>
-                <p>${product.specialOffer} ${product.normalPrice}</p>
+                <p><span class="specialOffer">${product.specialOffer.toFixed(2)}</span> <span class="normalPrice">${product.normalPrice.toFixed(2)}</span></p>
                 <button class="btn-addToCart" id="btn-id-${product.id}">Add to cart</button>
             </div>
             </div>

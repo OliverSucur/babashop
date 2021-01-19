@@ -38,3 +38,22 @@ form label{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
 }
+
+#cart-button button{
+    background-color: grey; /* Green */
+    border: none;
+    color: white;
+    padding: 4px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+#cart-button button:hover{
+    background-color: lightgray;
+    transition: 0.3s;
+}
