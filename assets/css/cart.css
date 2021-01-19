@@ -58,3 +58,10 @@ table {
   #cart-back-button button:hover{
       background-color: black;
   }
+
+  @media only screen and (max-width: 400px) and (max-height: 900px){
+    table td button{
+        width: 5px;
+        font-size: 10px;
+    }
+  }

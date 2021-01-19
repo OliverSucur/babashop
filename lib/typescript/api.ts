@@ -129,7 +129,11 @@ router
         ctx.response.body = cart;
     })
     .delete("/babashop/cart/products/remove:id", (ctx) => {
+        let tempCart = cart.filter(e => e.id == ctx.params.id);
         cart = cart.filter(e => e.id != ctx.params.id);
+        for(let i = 0;i < tempCart.length - 1; i++){
+            cart.push(tempCart[i]);
+        }
         ctx.response.status = 200;
     })
     .get("/babashop/cart/products/total", (ctx) => {
