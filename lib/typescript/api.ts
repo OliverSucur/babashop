@@ -130,7 +130,8 @@ router
         ctx.response.body = cart;
     })
     .delete("/babashop/cart/products/remove:id", (ctx) => {
-        cart.splice(cart.findIndex(e => e.id === ctx.params.id),1);
+        cart.splice(cart.length-1, 1);
+        console.log(cart);
         ctx.response.status = 200;
     });
     

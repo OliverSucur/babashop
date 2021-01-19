@@ -4,7 +4,7 @@ import { AnzahlCartProducts } from "../../models/anzahl.ts";
 
 export async function loadTable(){
     const table = document.querySelector("table");
-
+    table.innerHTML = "";
     const responseTableColumns = await fetch("/babashop/cart/tablecolumns");
     const tablecolumns: TableColumn[] = await responseTableColumns.json();
 
@@ -34,13 +34,16 @@ export async function loadTable(){
         anzahl = await getAnzahl(product);
         tdProduct.innerHTML = product.productName;
         tdEinzelpreis.innerHTML = product.specialOffer.toString();
-        tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl">-</button>${anzahl}<button id="btn-addAnzahl">+</button>`
+        tdAnzahl.innerHTML = `<button id="btn-deleteAnzahl-${product.productName}">-</button>${anzahl}<button id="btn-addAnzahl${product.productName}">+</button>`
         tdTotal.innerHTML = `${product.specialOffer*anzahl}`;
         table.appendChild(tr);
+    }
 
-        document.getElementById("btn-deleteAnzahl").addEventListener("click", () => {
-            
-        })
+    for(const product of cartProducts){
+        document.getElementById(`btn-deleteAnzahl-${product.productName}`).addEventListener("click", async () => {
+            await fetch(`/babashop/cart/products/remove:${product.id}`, { method: "DELETE" });
+            loadTable();
+        });
     }
 }
 
@@ -51,4 +54,9 @@ async function getAnzahl(product: Product): Promise<number>{
     const anzahl = cartProducts.filter(e => e.id == product.id).length;
     console.log(anzahl);
     return anzahl;
+}
+
+async function deleteProduct(product: Product){
+    await fetch(`/babashop/cart/products/remove:${product.id}`, { method: "DELETE" });
+    await loadTable();
 }
