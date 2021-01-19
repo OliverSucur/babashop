@@ -90,14 +90,14 @@ const products: Product[] = [
     }
 ];
 
-const cart: Product[] = [];
+let cart: Product[] = [];
 const tablecolumns: TableColumn[] = [
     {id: v4.generate(), title: "Produkt"},
     {id: v4.generate(), title: "Einzelpreis"},
     {id: v4.generate(), title: "Anzahl"},
     {id: v4.generate(), title: "Total"},
 ];
-
+let detailProduct:Product;
 const session = new Session({
     framework: "oak",
     store: "memory",
@@ -120,13 +120,32 @@ router
     .get("/babashop/products:id", (ctx) => {
         ctx.response.body = products.find(e => e.id == ctx.params.id);
     })
-    .post("/babashop/cart", async (ctx) => {
+    .post("/babashop/cart",  async (ctx) => {
         let addedProduct = await ctx.request.body({ type: "json" }).value;
         cart.push(addedProduct);
         ctx.response.body = 200;
     })
-    .get("/babashop/cart/products", async (ctx) => {
+    .get("/babashop/cart/products", (ctx) => {
         ctx.response.body = cart;
+    })
+    .delete("/babashop/cart/products/remove:id", (ctx) => {
+        let tempCart = cart.filter(e => e.id == ctx.params.id);
+        cart = cart.filter(e => e.id != ctx.params.id);
+        for(let i = 0;i < tempCart.length - 1; i++){
+            cart.push(tempCart[i]);
+        }
+        ctx.response.status = 200;
+    })
+    .get("/babashop/cart/products/total", (ctx) => {
+        let total:number = 0;
+        for(const product of cart){
+            total += product.specialOffer;
+        }
+        ctx.response.body = total;
+    })
+    .delete("/babashop/cart/products/remove/all", (ctx) => {
+        cart = [];
+        ctx.response.status = 200;
     });
     
 

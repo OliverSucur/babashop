@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+    <link rel="stylesheet" href="./../../assets/css/order.css">
+</head>
+<body>
+    <header>
+        <h1>Babashop</h1>
+    </header>
+    <div id="cart-button">
+
+    </div>
+    <main>
+        <form>
+            <label for="firstname">Vorname</label><br>
+            <input type="text"><br>
+            <label for="lastname">Nachname</label><br>
+            <input type="text"><br>
+            <label for="email">E-Mail</label><br>
+            <input type="email"><br>
+            <button type="submit">Einkauf abschliessen</button>
+        </form>
+    </main>
+    <script type="module">
+        import { formHandle } from "./../javascript/build.app.js";
+        formHandle();
+    </script>
+</body>
+</html>

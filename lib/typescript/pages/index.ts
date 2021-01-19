@@ -6,13 +6,18 @@ export async function loadProducts() {
     const responseProducts = await fetch("/babashop/products");
     const products: Product[] = await responseProducts.json();
     const main = document.querySelector("main");
+    main.innerHTML = "";
+    document.getElementById("div-button").innerHTML = "";
+
+    const responseTotal = await fetch("/babashop/cart/products/total");
+    const total:Promise<number> = responseTotal.json();
 
     const button = document.createElement("button");
     button.id = "btn-cart";
-    button.innerHTML = "Warenkorb";
+    button.innerHTML = `<img src='./assets/svg/shopping-cart.svg'> CHF ${(await total).toFixed(2)}`;
 
     const header = document.querySelector("header");
-    header.appendChild(button);
+    document.getElementById("div-button").appendChild(button);
     
     document.querySelector("#btn-cart").addEventListener("click", () => {
         location.href = "./lib/html/cart.html";
@@ -26,7 +31,7 @@ export async function loadProducts() {
             <img src="./../assets/img/${product.imageName}" alt="Avatar" style="width:100%">
             <div class="container">
                 <h4>${product.productName}</h4>
-                <p>${product.specialOffer} ${product.normalPrice}</p>
+                <p><span class="specialOffer">${product.specialOffer.toFixed(2)}</span> <span class="normalPrice">${product.normalPrice.toFixed(2)}</span></p>
                 <button class="btn-addToCart" id="btn-id-${product.id}">Add to cart</button>
             </div>
             </div>
@@ -46,5 +51,6 @@ async function productToCart(product: Product){
             headers: { 'Content-Type': 'application/json' }
         }
     )
+    loadProducts();
 }
 
